@@ -43,19 +43,7 @@ public class DBConnection {
     static String encrypkey = "";
     
     public static Connection connectDB(){
-         byte[] salt = new String("12345678").getBytes();
- 
-         AuthenticatedEncryptionCreated authenticatedEncryption = new systest.AuthenticatedEncryptionCreated();
-        // Decreasing this speeds down startup time and can be useful during testing, but it also makes it easier for brute force attackers
-        int iterationCount = 40000;
-        // Other values give me java.security.InvalidKeyException: Illegal key size or default parameters
-        int keyLength = 128;
-
-        try {
-         key = authenticatedEncryption.createSecretKey(Password.toCharArray(),
-         salt, iterationCount, keyLength);
-        } catch (Exception ex) {
-                     //Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        
         }
         
         Connection conn = null;
@@ -66,14 +54,12 @@ public class DBConnection {
                 FileInputStream in = new FileInputStream("C:\\Users\\magaj\\Documents\\NetBeansProjects\\PROJECTS_ROOT19\\medERP\\src\\encryptionhashBest\\connection.properties"); 
                 props.load(in);
                 String passwd = props.getProperty("database.login.password");
-
-                String decryptedPassword = authenticatedEncryption.decrypt(passwd, key);
-                          
+                String decryptedPassword = "";
+                                        
             // open a connection.
             conn = DriverManager.getConnection(DB_URL,USER,decryptedPassword);
             
-            decryptedPassword = "";
-            
+                      
             return conn;
             
         } catch(SQLException ex){
