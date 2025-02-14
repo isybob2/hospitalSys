@@ -30,32 +30,7 @@ public class appoinement extends javax.swing.JInternalFrame {
         initComponents();
     }
     
-    public void filltable(){
-        tb = Connect.FillTable("SELECT * FROM "+TABLE_NAME+" order by datetimestamp ASC");
-        aplist.setModel(tb);
-        ClientRS = Connect.Select_request("Select * from clients");
   
-        try {
-            clientcombo.removeAllItems();
-            while(ClientRS.next()){
-                String id = ClientRS.getString("CIN");
-                clientcombo.addItem(id);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(appoinement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
-    
-    public String getCIN(String id) throws SQLException{
-        ResultSet rs2 = Connect.Select_request("Select cin from clients where id = "+id);
-        while(rs2.next()){
-            String CIN = rs2.getString("cin");
-            return CIN;
-        }
-        return null;
-    }
-
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -284,109 +259,11 @@ public class appoinement extends javax.swing.JInternalFrame {
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         
-        filltable();
+       
         
     }//GEN-LAST:event_formInternalFrameOpened
 
-    private void aplistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_aplistMouseClicked
-        int row = aplist.getSelectedRow();
-        String id = (String) aplist.getValueAt(row, 0);
-        ResultSet rs = Connect.Select_request("SELECT * FROM "+TABLE_NAME+" WHERE id = "+id);
-        try {
-            while(rs.next()){
-                reffield.setText(id);
-                clientcombo.setSelectedItem(getCIN(rs.getString("client")));
-                datespinner.setValue(rs.getTimestamp("datetimestamp"));
-                desc.setText(rs.getString("description"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(appoinement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_aplistMouseClicked
-
-    private void addbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbtnActionPerformed
-        String ClientCIN = (String) clientcombo.getSelectedItem();
-        SimpleDateFormat formater = new SimpleDateFormat("YYYY-MM-dd HH:mm");
-        String apdate = formater.format(datespinner.getValue());
-        String description = desc.getText();
-        ResultSet rs = Connect.Select_request("SELECT id from clients where CIN = '"+ClientCIN+"'");
-        String id;
-        try {
-            while(rs.next()){
-                id = rs.getString("id");
-                String Query = "INSERT INTO appointments(client, datetimestamp, description) "
-                        + "VALUES ("+id+", '"+apdate+"', '"+description+"')";
-                System.out.println(Query);
-                boolean isDone = Connect.AMS_request(Query);
-                if (isDone){
-                    JOptionPane.showMessageDialog(null, "Appointment Created Successfully");
-                    filltable();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Can't Reach Database");
-                }
-            }
-                
-        } catch (SQLException ex) {
-            Logger.getLogger(appoinement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }//GEN-LAST:event_addbtnActionPerformed
-
-    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
-        desc.setText("");
-        clientcombo.setSelectedItem("");
-        reffield.setText("");
-    }//GEN-LAST:event_clearActionPerformed
-
-    private void refreshbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshbtnActionPerformed
-        filltable();
-    }//GEN-LAST:event_refreshbtnActionPerformed
-
-    private void editbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editbtnActionPerformed
-        String ClientCIN = (String) clientcombo.getSelectedItem();
-        SimpleDateFormat formater = new SimpleDateFormat("YYYY-MM-dd HH:mm");
-        String apdate = formater.format(datespinner.getValue());
-        String description = desc.getText();
-        ResultSet rs = Connect.Select_request("SELECT id from clients where CIN = '"+ClientCIN+"'");
-        String id;
-        String ref = reffield.getText();
-        try {
-            while(rs.next()){
-                id = rs.getString("id");
-                
-                String Query = "UPDATE "+TABLE_NAME+" SET client = '"+id+"', datetimestamp = '"+apdate+"', description = '"+description+"'"
-                        + " WHERE id = "+ref;
-                boolean isDone = Connect.AMS_request(Query);
-                if (isDone){
-                    JOptionPane.showMessageDialog(null, "Appointment Updated Successfully");
-                    filltable();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Can't Update this Appointment");
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(appoinement.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_editbtnActionPerformed
-
-    private void delbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delbtnActionPerformed
-        int row = aplist.getSelectedRow();
-        int id = Integer.parseInt((String) aplist.getValueAt(row, 0));
-        // System.out.println(id);
-        int selectedOption = JOptionPane.showConfirmDialog(null, 
-                "Are you shure you want to delete appointment number :"+id+" ?", 
-                "Delete Appointment", JOptionPane.YES_NO_OPTION);
-        if (selectedOption == JOptionPane.YES_OPTION){
-            boolean isDone = Connect.AMS_request("DELETE FROM "+TABLE_NAME+" WHERE id = "+id);
-            if (isDone){
-                JOptionPane.showMessageDialog(null, "Appointment Deleted Successfully");
-            } else {
-                JOptionPane.showMessageDialog(null, "You can't delete this Appointment");
-            }
-            filltable();
-        }
-    }//GEN-LAST:event_delbtnActionPerformed
-
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addbtn;
