@@ -615,10 +615,7 @@ private static final String SQL_TYPES =
     }
 
     private static String decrypt(String string, SecretKeySpec key) throws GeneralSecurityException, IOException {
-        String iv = string.split(":")[0];
-        String property = string.split(":")[1];
-        Cipher pbeCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        pbeCipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(base64Decode(iv)));
+        
         return new String(pbeCipher.doFinal(base64Decode(property)), "UTF-8");
     }
 
