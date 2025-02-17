@@ -6,10 +6,12 @@ define('DB_PASS','');
 define('DB_NAME','damsmsdb');
 // Establish database connection.
 
+try
+{
 $database= new mysqli($host,$username,$password,$db_name);
-
-  if ($database->connect_error){
-        exit("Error: " . $e->getMessage());
-    }
-
+ }
+catch (PDOException $e)
+{
+exit("Error: " . $e->getMessage());
+}
 ?>
