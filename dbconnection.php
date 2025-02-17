@@ -9,7 +9,7 @@ define('DB_NAME','damsmsdb');
 $database= new mysqli($host,$username,$password,$db_name);
 
   if ($database->connect_error){
-        die("Connection failed:  ".$database->connect_error);
+        exit("Error: " . $e->getMessage());
     }
 
 ?>
